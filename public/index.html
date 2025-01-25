@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MysticScribe 🪄</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #1e1e2f;
+            color: #fff;
+            font-family: 'Merriweather', serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(30, 30, 47, 0.9);
+            border-radius: 12px;
+            border: 2px solid #6c5b7b;
+            box-shadow: 0 0 20px rgba(108, 91, 123, 0.5);
+        }
+        h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #f8b195;
+            text-shadow: 0 0 10px #f8b195, 0 0 20px #f8b195;
+        }
+        p.subtitle {
+            font-size: 1.1rem;
+            text-align: center;
+            color: #c06c84;
+            margin-bottom: 40px;
+        }
+        .options {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .options button {
+            background: #6c5b7b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #fff;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease;
+            flex: 1;
+            margin: 5px;
+        }
+        .options button:hover {
+            background: #5a4a6a;
+            transform: translateY(-2px);
+        }
+        .options button.active {
+            background: #f8b195;
+            color: #1e1e2f;
+        }
+        .options button:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #6c5b7b;
+            background: rgba(108, 91, 123, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        textarea:focus {
+            border-color: #f8b195;
+            outline: none;
+        }
+        textarea::placeholder {
+            color: #aaa;
+        }
+        button.generate-button {
+            background: #6c5b7b;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: background 0.3s ease, transform 0.3s ease;
+        }
+        button.generate-button:hover {
+            background: #5a4a6a;
+            transform: translateY(-2px);
+        }
+        #output {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(108, 91, 123, 0.2);
+            border-radius: 8px;
+            border: 2px solid #6c5b7b;
+            white-space: pre-wrap;
+            font-size: 1rem;
+            line-height: 1.6;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #6c5b7b;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #c06c84;
+        }
+        /* Language Selector */
+        .language-selector {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .language-selector label {
+            font-size: 1rem;
+            color: #c06c84;
+            margin-right: 10px;
+        }
+        .language-selector select {
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 2px solid #6c5b7b;
+            background: rgba(108, 91, 123, 0.2);
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .language-selector select:disabled {
+            background: #555;
+            color: #999;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><span class="dancing-text">MysticScribe 🪄</span></h1>
+        <p class="subtitle">Unleash your creativity in a world of magic and wonder.</p>
+
+        <!-- Language Selector -->
+        <div class="language-selector">
+            <label for="language">Select Language:</label>
+            <select id="language" onchange="handleLanguageChange()">
+                <option value="english">English</option>
+                <option value="malayalam" disabled>Malayalam (Coming Soon)</option>
+            </select>
+        </div>
+
+        <!-- Content Type Options -->
+        <div class="options">
+            <button onclick="selectOption('poem')" id="poemBtn">Poem ✍️</button>
+            <button onclick="selectOption('story')" id="storyBtn">Story 📖</button>
+            <button onclick="selectOption('description')" id="descriptionBtn">Description 🖼️</button>
+            <button onclick="selectOption('email')" id="emailBtn">Email 📧</button>
+            <button onclick="selectOption('ad')" id="adBtn">Ad 📢</button>
+        </div>
+
+        <textarea id="prompt" rows="5" placeholder="e.g., Write a poem about the moonlit forest..."></textarea>
+        <button class="generate-button" onclick="generateContent()">Cast the Spell ✨</button>
+
+        <div class="loader" id="loader"></div>
+
+        <div id="output"></div>
+    </div>
+
+    <div class="footer">
+        <p>Powered by the Magic of Words ✨ | © 2023 Ambili Sunil</p>
+    </div>
+
+    <script>
+        let selectedOption = 'poem'; // Default option
+        let selectedLanguage = 'english'; // Default language
+
+        // Function to handle language change
+        function handleLanguageChange() {
+            const languageSelector = document.getElementById('language');
+            selectedLanguage = languageSelector.value;
+
+            if (selectedLanguage === 'malayalam') {
+                alert('Malayalam support is coming soon!');
+                languageSelector.value = 'english'; // Reset to English
+                selectedLanguage = 'english';
+            }
+        }
+
+        // Function to handle option selection
+        function selectOption(option) {
+            selectedOption = option;
+            document.getElementById('poemBtn').classList.remove('active');
+            document.getElementById('storyBtn').classList.remove('active');
+            document.getElementById('descriptionBtn').classList.remove('active');
+            document.getElementById('emailBtn').classList.remove('active');
+            document.getElementById('adBtn').classList.remove('active');
+            document.getElementById(`${option}Btn`).classList.add('active');
+
+            // Update placeholder text based on selected option
+            const placeholderText = {
+                poem: 'e.g., Write a poem about the moonlit forest...',
+                story: 'e.g., Write a story about a hidden grove in an enchanted forest...',
+                description: 'e.g., Describe a magical creature in the forest...',
+                email: 'e.g., Write a professional email to a client...',
+                ad: 'e.g., Write an advertisement for a new product...'
+            };
+            document.getElementById('prompt').placeholder = placeholderText[option];
+        }
+
+        // Set the default option as active
+        selectOption('poem');
+
+        async function generateContent() {
+            const prompt = document.getElementById('prompt').value;
+
+            if (!prompt) {
+                alert('Please enter your magical prompt!');
+                return;
+            }
+
+            const output = document.getElementById('output');
+            const loader = document.getElementById('loader');
+
+            output.innerText = '';
+            loader.style.display = 'block';
+
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ prompt, type: selectedOption, language: selectedLanguage }),
+                });
+
+                const data = await response.json();
+                if (data.error) {
+                    output.innerText = `Error: ${data.error}`;
+                } else {
+                    output.innerText = data.content;
+                }
+            } catch (error) {
+                output.innerText = 'The spell failed! Please try again.';
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

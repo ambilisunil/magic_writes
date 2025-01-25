@@ -160,6 +160,39 @@
             color: #999;
             cursor: not-allowed;
         }
+
+        /* Mobile View Adjustments */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2.5rem; /* Smaller font size for mobile */
+            }
+            p.subtitle {
+                font-size: 1rem; /* Smaller font size for mobile */
+                margin-bottom: 20px;
+            }
+            .options {
+                flex-direction: column; /* Stack buttons vertically on mobile */
+                gap: 10px; /* Space between buttons */
+            }
+            .options button {
+                width: 100%; /* Full width buttons on mobile */
+                margin: 0; /* Remove margin for stacked buttons */
+            }
+            textarea {
+                padding: 10px; /* Reduced padding for mobile */
+            }
+            #output {
+                max-height: 300px; /* Reduced height for mobile */
+                padding: 15px; /* Adjusted padding for mobile */
+            }
+            .footer {
+                font-size: 0.8rem; /* Smaller font size for mobile */
+            }
+        }
     </style>
 </head>
 <body>

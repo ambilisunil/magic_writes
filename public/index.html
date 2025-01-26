@@ -1,201 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MysticScribe 🪄</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Merriweather:wght@400;700&display=swap"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
     <style>
-        body {
-            background: #1e1e2f;
-            color: #fff;
-            font-family: 'Merriweather', serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-        .container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background: rgba(30, 30, 47, 0.9);
-            border-radius: 12px;
-            border: 2px solid #6c5b7b;
-            box-shadow: 0 0 20px rgba(108, 91, 123, 0.5);
-        }
-        h1 {
-            font-family: 'Cinzel', serif;
-            font-size: 4rem;
-            text-align: center;
-            margin-bottom: 20px;
-            color: #f8b195;
-            text-shadow: 0 0 10px #f8b195, 0 0 20px #f8b195;
-        }
-        p.subtitle {
-            font-size: 1.1rem;
-            text-align: center;
-            color: #c06c84;
-            margin-bottom: 40px;
-        }
-        .options {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        .options button {
-            background: #6c5b7b;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1rem;
-            color: #fff;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
-            flex: 1;
-            margin: 5px;
-        }
-        .options button:hover {
-            background: #5a4a6a;
-            transform: translateY(-2px);
-        }
-        .options button.active {
-            background: #f8b195;
-            color: #1e1e2f;
-        }
-        .options button:disabled {
-            background: #555;
-            color: #999;
-            cursor: not-allowed;
-        }
-        textarea {
-            width: 100%;
-            padding: 15px;
-            border-radius: 8px;
-            border: 2px solid #6c5b7b;
-            background: rgba(108, 91, 123, 0.2);
-            color: #fff;
-            font-size: 1rem;
-            resize: vertical;
-            transition: border-color 0.3s ease;
-        }
-        textarea:focus {
-            border-color: #f8b195;
-            outline: none;
-        }
-        textarea::placeholder {
-            color: #aaa;
-        }
-        button.generate-button {
-            background: #6c5b7b;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 1rem;
-            color: #fff;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-            transition: background 0.3s ease, transform 0.3s ease;
-        }
-        button.generate-button:hover {
-            background: #5a4a6a;
-            transform: translateY(-2px);
-        }
-        #output {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(108, 91, 123, 0.2);
-            border-radius: 8px;
-            border: 2px solid #6c5b7b;
-            white-space: pre-wrap;
-            font-size: 1rem;
-            line-height: 1.6;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .loader {
-            display: none;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #6c5b7b;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #c06c84;
-        }
-        /* Language Selector */
-        .language-selector {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .language-selector label {
-            font-size: 1rem;
-            color: #c06c84;
-            margin-right: 10px;
-        }
-        .language-selector select {
-            padding: 8px 12px;
-            border-radius: 8px;
-            border: 2px solid #6c5b7b;
-            background: rgba(108, 91, 123, 0.2);
-            color: #fff;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        .language-selector select:disabled {
-            background: #555;
-            color: #999;
-            cursor: not-allowed;
-        }
-
-        /* Mobile View Adjustments */
-        @media (max-width: 768px) {
-            .container {
-                margin: 20px auto;
-                padding: 15px;
-            }
-            h1 {
-                font-size: 2.5rem; /* Smaller font size for mobile */
-            }
-            p.subtitle {
-                font-size: 1rem; /* Smaller font size for mobile */
-                margin-bottom: 20px;
-            }
-            .options {
-                flex-direction: column; /* Stack buttons vertically on mobile */
-                gap: 10px; /* Space between buttons */
-            }
-            .options button {
-                width: 100%; /* Full width buttons on mobile */
-                margin: 0; /* Remove margin for stacked buttons */
-            }
-            textarea {
-                padding: 10px; /* Reduced padding for mobile */
-            }
-            #output {
-                max-height: 300px; /* Reduced height for mobile */
-                padding: 15px; /* Adjusted padding for mobile */
-            }
-            .footer {
-                font-size: 0.8rem; /* Smaller font size for mobile */
-            }
-        }
+    
     </style>
 </head>
+
 <body>
+    <!-- Magic Star Rain -->
+    <div id="starRain"></div>
+
+    <!-- Corner Login/Signup Buttons -->
+    <div class="auth-buttons" id="authButtons">
+        <button class="google-signin" id="googleSignInButton" onclick="redirectToBackendForGoogleSignIn()">
+            Sign in with Google
+        </button>
+        <button class="logout-button hidden" id="logoutButton" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Main Content -->
     <div class="container">
         <h1><span class="dancing-text">MysticScribe 🪄</span></h1>
         <p class="subtitle">Unleash your creativity in a world of magic and wonder.</p>
@@ -224,6 +58,9 @@
         <div class="loader" id="loader"></div>
 
         <div id="output"></div>
+
+        <!-- Download Button -->
+        <button class="download-button hidden" id="downloadButton" onclick="downloadContent()">Download as .txt 📥</button>
     </div>
 
     <div class="footer">
@@ -232,22 +69,69 @@
     </div>
 
     <script>
-        let selectedOption = 'poem'; // Default option
-        let selectedLanguage = 'english'; // Default language
+        // Magic Star Rain Animation
+        function createStarRain() {
+            const starRain = document.getElementById('starRain');
+            for (let i = 0; i < 10; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                star.style.animationDelay = `${Math.random() * 2}s`;
+                starRain.appendChild(star);
+            }
+        }
 
-        // Function to handle language change
+        createStarRain();
+        function checkAuth() {
+            const token = localStorage.getItem('googleToken');
+            const googleSignInButton = document.getElementById('googleSignInButton');
+            const logoutButton = document.getElementById('logoutButton');
+
+            if (token) {
+                googleSignInButton.classList.add('hidden');
+                logoutButton.classList.remove('hidden');
+            } else {
+                googleSignInButton.classList.remove('hidden');
+                logoutButton.classList.add('hidden');
+            }
+        }
+        checkAuth()
+
+
+        function getTokenFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('token');
+        }
+
+        const token = getTokenFromURL();
+        if (token) {
+            localStorage.setItem('googleToken', token);
+            const cleanURL = window.location.origin + window.location.pathname;
+            checkAuth()
+            window.history.replaceState({}, document.title, cleanURL);
+        }
+
+        let selectedOption = 'poem';
+        let selectedLanguage = 'english';
+
+        function logout() {
+            localStorage.removeItem('googleToken');
+            checkAuth();
+            alert('Logged out successfully!');
+        }
+
         function handleLanguageChange() {
             const languageSelector = document.getElementById('language');
             selectedLanguage = languageSelector.value;
 
             if (selectedLanguage === 'malayalam') {
                 alert('Malayalam support is coming soon!');
-                languageSelector.value = 'english'; // Reset to English
+                languageSelector.value = 'english';
                 selectedLanguage = 'english';
             }
         }
 
-        // Function to handle option selection
         function selectOption(option) {
             selectedOption = option;
             document.getElementById('poemBtn').classList.remove('active');
@@ -257,7 +141,6 @@
             document.getElementById('adBtn').classList.remove('active');
             document.getElementById(`${option}Btn`).classList.add('active');
 
-            // Update placeholder text based on selected option
             const placeholderText = {
                 poem: 'e.g., Write a poem about the moonlit forest...',
                 story: 'e.g., Write a story about a hidden grove in an enchanted forest...',
@@ -268,28 +151,38 @@
             document.getElementById('prompt').placeholder = placeholderText[option];
         }
 
-        // Set the default option as active
         selectOption('poem');
 
         async function generateContent() {
-            const prompt = document.getElementById('prompt').value;
-
-            if (!prompt) {
-                alert('Please enter your magical prompt!');
-                return;
-            }
+            
 
             const output = document.getElementById('output');
             const loader = document.getElementById('loader');
+            const downloadButton = document.getElementById('downloadButton');
 
             output.innerText = '';
             loader.style.display = 'block';
+            downloadButton.classList.add('hidden');
+
+            const token = localStorage.getItem('googleToken');
+            if (!token) {
+                alert("Please Sign in to continue.");
+                loader.style.display = 'none';
+                return;
+            }
+            const prompt = document.getElementById('prompt').value;
+
+            if (!prompt) {
+                alert('Please enter your magical words!');
+                return;
+            }
 
             try {
                 const response = await fetch('/generate', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify({ prompt, type: selectedOption, language: selectedLanguage }),
                 });
@@ -298,7 +191,12 @@
                 if (data.error) {
                     output.innerText = `Error: ${data.error}`;
                 } else {
+                    if (data.message && response.status !== 200) {
+                        alert(data.message);
+                    }
                     output.innerText = data.content;
+                    output.classList.add('success'); // Add private styling
+                    downloadButton.classList.remove('hidden');
                 }
             } catch (error) {
                 output.innerText = 'The spell failed! Please try again.';
@@ -306,6 +204,55 @@
                 loader.style.display = 'none';
             }
         }
+
+        function redirectToBackendForGoogleSignIn() {
+            window.location.href = '/auth/google';
+        }
+
+        function handleGoogleSignIn(response) {
+            const idToken = response.credential;
+
+            fetch('/auth/google', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idToken }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        localStorage.setItem('googleToken', data.token);
+                        checkAuth();
+                        alert('Google Sign-In successful!');
+                    } else {
+                        alert('Google Sign-In failed. Please try again.');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Google Sign-In error:', error);
+                    alert('Google Sign-In failed. Please try again.');
+                });
+        }
+
+        function downloadContent() {
+            const content = document.getElementById('output').innerText;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'MysticScribe_Output.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
     </script>
 </body>
+
 </html>
+
+
+
+
+
+
+

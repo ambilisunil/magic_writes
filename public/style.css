@@ -1,0 +1,332 @@
+body {
+    background: #1e1e2f;
+    color: #fff;
+    font-family: 'Merriweather', serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    position: relative;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Magic Star Rain Animation */
+@keyframes starRain {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 1;
+    }
+}
+
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+    animation: starRain linear infinite;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: rgba(30, 30, 47, 0.9);
+    border-radius: 12px;
+    border: 2px solid #6c5b7b;
+    box-shadow: 0 0 20px rgba(108, 91, 123, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 4rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #f8b195;
+    text-shadow: 0 0 10px #f8b195, 0 0 20px #f8b195;
+}
+
+p.subtitle {
+    font-size: 1.1rem;
+    text-align: center;
+    color: #c06c84;
+    margin-bottom: 40px;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.options button {
+    background: #6c5b7b;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
+    flex: 1;
+    margin: 5px;
+}
+
+.options button:hover {
+    background: #5a4a6a;
+    transform: translateY(-2px);
+}
+
+.options button.active {
+    background: #f8b195;
+    color: #1e1e2f;
+}
+
+.options button:disabled {
+    background: #555;
+    color: #999;
+    cursor: not-allowed;
+}
+
+textarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid #6c5b7b;
+    background: rgba(108, 91, 123, 0.2);
+    color: #fff;
+    font-size: 1rem;
+    resize: vertical;
+    transition: border-color 0.3s ease;
+}
+
+textarea:focus {
+    border-color: #f8b195;
+    outline: none;
+}
+
+textarea::placeholder {
+    color: #aaa;
+}
+
+button.generate-button {
+    background: #6c5b7b;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+button.generate-button:hover {
+    background: #5a4a6a;
+    transform: translateY(-2px);
+}
+
+#output {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(108, 91, 123, 0.2);
+    border-radius: 8px;
+    border: 2px solid #6c5b7b;
+    white-space: pre-wrap;
+    font-size: 1rem;
+    line-height: 1.6;
+    max-height: 400px;
+    overflow-y: auto;
+    transition: all 0.5s ease;
+}
+
+/* Private Styling for Generated Content */
+#output.success {
+    border-color: #f8b195;
+    box-shadow: 0 0 20px rgba(248, 177, 149, 0.5);
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 10px rgba(248, 177, 149, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(248, 177, 149, 0.8);
+    }
+}
+
+.loader {
+    display: none;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #6c5b7b;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #c06c84;
+}
+
+/* Language Selector */
+.language-selector {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.language-selector label {
+    font-size: 1rem;
+    color: #c06c84;
+    margin-right: 10px;
+}
+
+.language-selector select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 2px solid #6c5b7b;
+    background: rgba(108, 91, 123, 0.2);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.language-selector select:disabled {
+    background: #555;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    p.subtitle {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+
+    .options {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .options button {
+        width: 100%;
+        margin: 0;
+    }
+
+    textarea {
+        padding: 10px;
+    }
+
+    #output {
+        max-height: 300px;
+        padding: 15px;
+    }
+
+    .footer {
+        font-size: 0.8rem;
+    }
+
+    /* Mobile-specific adjustments for auth buttons */
+    .auth-buttons {
+        position: static;
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .auth-buttons button {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Google Sign-In Button */
+.google-signin {
+    background: #4285f4;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.google-signin:hover {
+    background: #357abd;
+}
+
+.google-signin img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Logout Button */
+.logout-button {
+    background: #c06c84;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.logout-button:hover {
+    background: #a2566d;
+}
+
+/* Download Button */
+.download-button {
+    background: #6c5b7b;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.download-button:hover {
+    background: #5a4a6a;
+    transform: translateY(-2px);
+}

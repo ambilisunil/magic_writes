@@ -115,21 +115,30 @@ app.post('/auth/google/callback', async (req, res) => {
             audience: process.env.GOOGLE_CLIENT_ID,
         });
         const payload = ticket.getPayload();
+
+
+        // const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
+        // const data = await response.json();
+
+
         const { sub: googleId, email, name } = payload;
 
-        // Check if user already exists
-        let user = await User.findOne({ googleId });
+
+       // Check if user already exists
+        let user = await User.findOne({ emailId:email });
+
 
         if (!user) {
             // Create a new user
             user = new User({
-                username: email,
+                emailId: email,
                 googleId,
                 name
             });
             await user.save();
         }
-        const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+        const token = jwt.sign({ userId: user._id, email: user.emailId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
         res.json({ success: true, token ,user});
 

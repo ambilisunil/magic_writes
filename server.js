@@ -192,26 +192,26 @@ app.post('/generate',authenticateToken, async (req, res) => {
 
         
 
-        // const response = await axios.post(
-        //     'https://api.openai.com/v1/chat/completions', // Updated endpoint for GPT-3.5-turbo
-        //     {
-        //         model: 'gpt-3.5-turbo', // Use the latest GPT model
-        //         messages: [
-        //             { role: 'user', content: prompt } // Pass the prompt as a user message
-        //         ],
-        //         max_tokens: 300, // Adjust based on the desired length
-        //         temperature: 0.7, // Controls creativity (0 = deterministic, 1 = creative)
-        //     },
-        //     {
-        //         headers: {
-        //             'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-        //             'Content-Type': 'application/json',
-        //         },
-        //     }
-        // );
+        const response = await axios.post(
+            'https://api.openai.com/v1/chat/completions', // Updated endpoint for GPT-3.5-turbo
+            {
+                model: 'gpt-3.5-turbo', // Use the latest GPT model
+                messages: [
+                    { role: 'user', content: prompt } // Pass the prompt as a user message
+                ],
+                max_tokens: 300, // Adjust based on the desired length
+                temperature: 0.7, // Controls creativity (0 = deterministic, 1 = creative)
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
 
-        //const generatedText = response.data.choices[0].message.content.trim();
-        const generatedText = "jkkjkjkjkj"
+        const generatedText = response.data.choices[0].message.content.trim();
+        // const generatedText = "jkkjkjkjkj"
       
 
         await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user.userId),{$inc:{useCount:1}});

@@ -27,9 +27,18 @@ const userSchema = new mongoose.Schema({
     name:{ type: String, default: '' },  
     googleId: { type: String, unique: true, sparse: true }, 
     useCount:{type:Number,default:0}//For Google-authenticated users
-});
+},{timestamps:true});
+
+const userHistory = new mongoose.Schema({
+    userId: { type: String, },
+    content: { type: String },
+    type: { type: String },
+
+},{timestamps:true});
 
 const User = mongoose.model('User', userSchema);
+const UserHistory = mongoose.model('UserHistory', userHistory);
+
 
 // Middleware to parse JSON
 app.use(express.json());
@@ -93,7 +102,7 @@ app.get('/auth/google/callback', async (req, res) => {
             });
             await user.save();
         }
-        const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '30d' });
 
         res.redirect(process.env.SERVER_URI+"?token="+token)
 
@@ -202,14 +211,35 @@ app.post('/generate',authenticateToken, async (req, res) => {
         );
 
         const generatedText = response.data.choices[0].message.content.trim();
+        // const generatedText = "jkkjkjkjkj"
       
 
         await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user.userId),{$inc:{useCount:1}});
+        history = new UserHistory({
+            userId: req.user.userId,
+            content:generatedText
+          
+        });
+        await history.save();
 
         res.status(200).json({ content: generatedText });
         }
     } catch (error) {
         console.error('Error generating content:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: 'Failed to generate content' ,error});
+    }
+});
+
+
+
+
+app.get('/history',authenticateToken, async (req, res) => {
+    try {
+        let data= await UserHistory.find({userId:req.user.userId});
+        res.status(200).json({ data });
+        
+    } catch (error) {
+        console.error('Error fetching history:', error.response ? error.response.data : error.message);
         res.status(500).json({ error: 'Failed to generate content' });
     }
 });

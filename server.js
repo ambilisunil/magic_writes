@@ -26,13 +26,15 @@ const userSchema = new mongoose.Schema({
     password: { type: String },
     name:{ type: String, default: '' },  
     googleId: { type: String, unique: true, sparse: true }, 
-    useCount:{type:Number,default:0}//For Google-authenticated users
+    useCount:{type:Number,default:0}
 },{timestamps:true});
 
 const userHistory = new mongoose.Schema({
     userId: { type: String, },
     content: { type: String },
     type: { type: String },
+    prompt: { type: String },
+
 
 },{timestamps:true});
 
@@ -217,7 +219,8 @@ app.post('/generate',authenticateToken, async (req, res) => {
         history = new UserHistory({
             userId: req.user.userId,
             content:generatedText,
-            type
+            type,
+            prompt
           
         });
         await history.save();

@@ -358,12 +358,12 @@ body {
 }
 
 .history-section {
-    width: 45%;
+    width: 30%;
     min-width: 350px;
     padding: 20px;
     background-color: #270540;
     border-radius: 10px;
-    height: 85vh;
+    height: 100vh;
     overflow-y: auto;
     box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
 }

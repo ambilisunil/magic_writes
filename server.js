@@ -26,13 +26,15 @@ const userSchema = new mongoose.Schema({
     password: { type: String },
     name:{ type: String, default: '' },  
     googleId: { type: String, unique: true, sparse: true }, 
-    useCount:{type:Number,default:0}//For Google-authenticated users
+    useCount:{type:Number,default:0}
 },{timestamps:true});
 
 const userHistory = new mongoose.Schema({
     userId: { type: String, },
     content: { type: String },
     type: { type: String },
+    prompt: { type: String },
+
 
 },{timestamps:true});
 
@@ -138,7 +140,6 @@ app.post('/auth/google/callback', async (req, res) => {
 
 
         if (!user) {
-            // Create a new user
             user = new User({
                 emailId: email,
                 googleId,
@@ -217,7 +218,9 @@ app.post('/generate',authenticateToken, async (req, res) => {
         await User.findByIdAndUpdate(new mongoose.Types.ObjectId(req.user.userId),{$inc:{useCount:1}});
         history = new UserHistory({
             userId: req.user.userId,
-            content:generatedText
+            content:generatedText,
+            type,
+            prompt
           
         });
         await history.save();
@@ -235,7 +238,7 @@ app.post('/generate',authenticateToken, async (req, res) => {
 
 app.get('/history',authenticateToken, async (req, res) => {
     try {
-        let data= await UserHistory.find({userId:req.user.userId});
+        let data= await UserHistory.find({userId:req.user.userId}).sort({createdAt:-1});
         res.status(200).json({ data });
         
     } catch (error) {

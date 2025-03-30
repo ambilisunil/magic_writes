@@ -330,3 +330,166 @@ button.generate-button:hover {
     background: #5a4a6a;
     transform: translateY(-2px);
 }
+
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #0f0524;
+    color: #e0d6f0;
+    margin: 0;
+    padding: 0;
+}
+
+.container-wrapper {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.main-container {
+    flex: 1;
+    padding: 20px;
+    background-color: #1a0938;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
+}
+
+.history-section {
+    width: 30%;
+    min-width: 350px;
+    padding: 20px;
+    background-color: #270540;
+    border-radius: 10px;
+    height: 100vh;
+    overflow-y: auto;
+    box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
+}
+
+.history-section h3 {
+    color: #d6a2ff;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #4a2a7a;
+}
+
+.history-entry {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: rgba(58, 12, 110, 0.5);
+    border-radius: 8px;
+    border-left: 4px solid #a732d5;
+    transition: all 0.3s ease;
+    position: relative;
+    max-height: 300px;
+    overflow: hidden;
+}
+
+.history-entry.expanded {
+    max-height: none;
+}
+
+.history-entry:hover {
+    background-color: rgba(58, 12, 110, 0.7);
+    transform: translateY(-2px);
+}
+
+.history-date {
+    font-size: 12px;
+    color: #b38cd9;
+    margin-bottom: 8px;
+    white-space: nowrap;
+}
+
+.history-content {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.history-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.history-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toggle-btn {
+    background-color: #7b1fa2;
+    color: white;
+}
+
+.toggle-btn:hover {
+    background-color: #9c27b0;
+}
+
+.export-btn {
+    background-color: #2e7d32;
+    color: white;
+}
+
+.export-btn:hover {
+    background-color: #4caf50;
+}
+
+.delete-btn {
+    background-color: #c62828;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.no-history {
+    text-align: center;
+    color: #b38cd9;
+    padding: 20px;
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .container-wrapper {
+        flex-direction: column;
+    }
+
+    .history-section {
+        width: 100%;
+        height: auto;
+        max-height: 400px;
+    }
+}
+
+/* Animation for the magic theme */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.history-entry:hover {
+    animation: float 1.5s ease-in-out infinite;
+}

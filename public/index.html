@@ -8,6 +8,15 @@
     <title>MysticScribe 🫰 - AI Poem, Story & Ad Generator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
+
+    <head>
+        <!-- Add this line with your other script tags -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.min.js"></script>
+        <script src="https://unpkg.com/docx@7.8.2/build/index.js"></script>
+
+
+    </head>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -371,6 +380,7 @@
                     output.innerText = data.content;
                     output.classList.add('success'); // Add private styling
                     downloadButton.classList.remove('hidden');
+                    loadHistory()
                 }
             } catch (error) {
                 output.innerText = 'The spell failed! Please try again.';
@@ -483,9 +493,9 @@
 
                     const exportBtn = document.createElement("button");
                     exportBtn.className = "history-btn export-btn";
-                    exportBtn.textContent = "Export";
+                    exportBtn.textContent = "Export Word";
                     exportBtn.onclick = function () {
-                        exportHistoryItem(item.content, item.createdAt);
+                        exportAsWord(item.content, item.createdAt);
                     };
 
                     // Only show toggle button if content is long
@@ -493,8 +503,26 @@
                         toggleBtn.style.display = "none";
                     }
 
+                    const exportPdfBtn = document.createElement("button");
+                    exportPdfBtn.className = "history-btn export-btn";
+                    exportPdfBtn.textContent = "Export PDF";
+                    exportPdfBtn.onclick = function () {
+                        exportAsPDF(item.content, item.createdAt);
+                    };
+
+
+
+
+
+
+                    entry.appendChild(date);
+                    entry.appendChild(content);
+                    entry.appendChild(actions);
+
                     actions.appendChild(toggleBtn);
                     actions.appendChild(exportBtn);
+                    actions.appendChild(exportPdfBtn);
+
 
                     entry.appendChild(date);
                     entry.appendChild(content);
@@ -528,6 +556,112 @@
 
         // Call loadHistory when the page loads
         document.addEventListener('DOMContentLoaded', loadHistory);
+
+
+        function exportAsPDF(content, dateString) {
+            // Initialize jsPDF
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Set document properties
+            const date = new Date(dateString);
+            const formattedDate = date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+
+            // Add title and date
+            doc.setFontSize(18);
+            doc.text('MysticScribe Creation', 105, 15, { align: 'center' });
+            doc.setFontSize(12);
+            doc.text(`Created: ${formattedDate}`, 105, 22, { align: 'center' });
+
+            // Add content
+            doc.setFontSize(12);
+            const lines = doc.splitTextToSize(content, 180); // Split text to fit page width
+            doc.text(lines, 15, 30);
+
+            // Save the PDF
+            doc.save(`MysticScribe_${date.toISOString().split('T')[0]}.pdf`);
+        }
+
+
+        function exportAsWord(content, dateString) {
+    // Access the docx library
+    const docx = window.docx;
+    const { Document, Paragraph, TextRun, Packer } = docx;
+    
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+
+    // Split content into paragraphs while preserving empty lines
+    const paragraphs = content.split('\n').map(line => {
+        return new Paragraph({
+            children: [
+                new TextRun({
+                    text: line || ' ', // Use space for empty lines
+                    size: 24,
+                })
+            ],
+            spacing: {
+                line: 300,
+            }
+        });
+    });
+
+    // Create the document
+    const doc = new Document({
+        sections: [{
+            properties: {},
+            children: [
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: "MysticScribe Creation",
+                            bold: true,
+                            size: 28
+                        })
+                    ],
+                    spacing: {
+                        after: 200
+                    },
+                    alignment: "center"
+                }),
+                new Paragraph({
+                    children: [
+                        new TextRun({
+                            text: `Created: ${formattedDate}`,
+                            italics: true,
+                            size: 22
+                        })
+                    ],
+                    alignment: "center",
+                    spacing: {
+                        after: 400
+                    }
+                }),
+                ...paragraphs // Include all content paragraphs
+            ]
+        }]
+    });
+
+    // Generate and download the Word file
+    Packer.toBlob(doc).then(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `MysticScribe_${date.toISOString().split('T')[0]}.docx`;
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+}
 
     </script>
 </body>

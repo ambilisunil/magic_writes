@@ -13,7 +13,8 @@ const REDIRECT_URI = process.env.SERVER_URI+"/auth/google/callback";
 // Google OAuth Client
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID, process.env.GOOGLE_CLIENT_SECRET, REDIRECT_URI);
-
+const cors = require('cors');
+app.use(cors());
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { })
     .then(() => console.log('Connected to MongoDB'))
@@ -169,7 +170,6 @@ app.post('/auth/google/callback', async (req, res) => {
 app.post('/generate',authenticateToken, async (req, res) => {
     let { prompt, type, language } = req.body;
     if(req.body.fe){
-        console.log(constants)
         res.status(200).json({ content: constants.dummy_poem });
         return;
 
@@ -200,7 +200,7 @@ app.post('/generate',authenticateToken, async (req, res) => {
         let user = await User.findById(new mongoose.Types.ObjectId(req.user.userId));
         if(user.useCount>process.env.MAX_USECOUNT){
             res.status(400).json({ content: "Limit Reached",message:"Limit Reached,Max Limit is 5 Trials" });
-
+            return;
         }else{
 
         
@@ -238,10 +238,15 @@ app.post('/generate',authenticateToken, async (req, res) => {
         await history.save();
 
         res.status(200).json({ content: generatedText });
+        return
         }
-    } catch (error) {
+    }catch (error) {
         console.error('Error generating content:', error.response ? error.response.data : error.message);
-        res.status(500).json({ error: 'Failed to generate content' ,error});
+
+        // ✅ Prevent double sending of headers
+        if (!res.headersSent) {
+            return res.status(500).json({ error: 'Failed to generate content', error });
+        }
     }
 });
 

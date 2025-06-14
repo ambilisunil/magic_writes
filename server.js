@@ -5,9 +5,8 @@ const { OAuth2Client } = require('google-auth-library');
 const axios = require('axios');
 const path = require('path');
 const { type } = require('os');
-const { console } = require('inspector');
 require('dotenv').config();
-
+const constants =require("./constant")
 const app = express();
 const PORT = process.env.PORT || 3000;
 const REDIRECT_URI = process.env.SERVER_URI+"/auth/google/callback";
@@ -52,6 +51,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
+    const FE = req.headers['fe'];
+    console.log(FE)
+    if(FE && FE==process.env.FLUTTER_SECRET){
+        req.body.fe=true;
+        next();
+    }
+
     const token = authHeader && authHeader.split(' ')[1]; // Format: "Bearer <token>"
 
     if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
@@ -162,6 +168,12 @@ app.post('/auth/google/callback', async (req, res) => {
 // API endpoint to generate content
 app.post('/generate',authenticateToken, async (req, res) => {
     let { prompt, type, language } = req.body;
+    if(req.body.fe){
+        console.log(constants)
+        res.status(200).json({ content: constants.dummy_poem });
+        return;
+
+    }
 
     if (!prompt) {
         return res.status(400).json({ error: 'Prompt is required' });
@@ -246,6 +258,8 @@ app.get('/history',authenticateToken, async (req, res) => {
         res.status(500).json({ error: 'Failed to generate content' });
     }
 });
+
+
 
 
 // Start the server

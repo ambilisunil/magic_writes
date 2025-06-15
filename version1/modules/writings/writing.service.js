@@ -14,7 +14,8 @@ exports.addWriting = async (req, res) => {
       content: req.body.content,
       type: req.body.type,
       userId: req.user.userId,
-      isPrivate: req.body?.isPrivate ?? true, // default true if not provided
+      isPrivate: req.body?.isPrivate ?? true,
+      title:req.body?.title  
     };
 
     const created = await new WritingModel(data).save();
@@ -140,6 +141,8 @@ exports.editWriting = async (req, res) => {
 
     writing.content = req.body.content ?? writing.content;
     writing.type = req.body.type ?? writing.type;
+    writing.title = req.body.type ?? writing.title;
+
     if (typeof req.body.isPrivate === 'boolean') {
       writing.isPrivate = req.body.isPrivate;
     }

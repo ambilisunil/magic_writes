@@ -1,7 +1,8 @@
 const router = require('express').Router();
-const { googleCallback, webGoogleCallback, redirectToGoogle } = require('./user.service');
+const { registerUser,loginUser } = require('./user.service');
 
-router.get('/google', redirectToGoogle);
-router.get('/google/callback', googleCallback);
-router.post('/google/callback', webGoogleCallback);
+
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+
 module.exports = router;

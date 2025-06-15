@@ -63,7 +63,9 @@ And from that night on, the Whispering Lake always sang back.`,
   moonlight. Drawn by an ancient song only she can hear,  
   Lina reconnects with the voices of the past and finds her 
   place in a world filled with quiet wonder and hidden memories.
-It's a story of mystery, memory, and the soft magic that lives in nature.`
+It's a story of mystery, memory, and the soft magic that lives in nature.`,
+
+userWritingTypes:["poem","story","qoutes","unspecific"]
 }
 
 module.exports =constants;

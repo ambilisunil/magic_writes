@@ -6,6 +6,7 @@ const userHistorySchema = new mongoose.Schema({
   type: { type: String,enum:userWritingTypes},
   isPrivate:{type:Boolean,default:true},
   likeCount:{type:Number,default:0},
+  title:{ type: String,default:"" },
 }, { timestamps: true });
 
 module.exports = mongoose.model('userWritings', userHistorySchema);
